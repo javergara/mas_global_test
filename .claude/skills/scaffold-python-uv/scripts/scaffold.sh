@@ -5,6 +5,14 @@
 # Idempotent: existing files are left untouched on re-run.
 set -euo pipefail
 
+# Resolve dependencies against public PyPI only. A locally configured
+# UV_INDEX_URL/UV_EXTRA_INDEX_URL (e.g. a corporate Artifactory mirror) gets
+# baked into uv.lock as each package's source registry; CI runners won't have
+# credentials for that mirror, so `uv sync --locked` 401s there. Unsetting
+# these here is local to this script's process tree and does not affect the
+# invoking shell.
+unset UV_INDEX_URL UV_EXTRA_INDEX_URL UV_DEFAULT_INDEX UV_INDEX 2>/dev/null || true
+
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ASSETS="$SKILL_DIR/assets"
 REPO_ROOT="$(pwd)"

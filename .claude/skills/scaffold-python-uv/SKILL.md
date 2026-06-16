@@ -39,8 +39,15 @@ The script performs these stages in order:
    the `tests/` package keep the underscored form — this is expected, not a
    bug.
 3. **Dev tooling** — `uv add --dev ruff pre-commit mypy pytest`, then
-   `uv sync`. Appends `[tool.ruff]`, `[tool.mypy]`, and
-   `[tool.pytest.ini_options]` sections to `pyproject.toml`.
+   `uv sync`. Appends `[tool.ruff]`, `[tool.mypy]`, `[tool.pytest.ini_options]`,
+   and a `[[tool.uv.index]]` pin to public PyPI (`default = true`) to
+   `pyproject.toml`. Before any resolution, the script unsets
+   `UV_INDEX_URL`/`UV_EXTRA_INDEX_URL`/`UV_DEFAULT_INDEX`/`UV_INDEX` for its
+   own process tree: a locally configured private index (e.g. a corporate
+   Artifactory mirror) gets baked into `uv.lock` as each package's source
+   registry, and CI runners won't have credentials for that mirror — causing
+   `uv sync --locked` to fail there with a 401. Resolving against public PyPI
+   keeps the lockfile usable in CI without secrets.
 4. **Tests** — creates `tests/` with a placeholder test wired into pytest via
    `testpaths`.
 5. **Pre-commit** — writes `.pre-commit-config.yaml` (ruff lint + format,
