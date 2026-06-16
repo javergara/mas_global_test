@@ -103,3 +103,40 @@ each slice rather than committing to a long plan up front.
   confirm. This is the behavior being scored.
 - **Keep changes small and reviewable.** Read every diff. Reject over-engineering and scope creep.
 - **Steer by correcting**, not restarting — point at the specific defect and the fix direction.
+
+
+## Interview excercise readme and file mapping:
+
+# rag-pipeline
+
+An internal service for running retrieval-augmented generation (RAG) queries. Given a question, it retrieves relevant documents from a vector store and generates an answer using an LLM.
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
+Python 3.11+ required.
+
+## Architecture
+
+| File | Responsibility |
+|------|----------------|
+| `src/pipeline.py` | Orchestrates retrieval + generation, emits OTel spans |
+| `src/retriever.py` | Async retry utility used when calling the vector store |
+| `src/tracer.py` | OTel SDK setup; exports `memory_exporter` for use in tests |
+| `src/types.py` | Shared dataclasses (`Query`, `Document`, `Response`) |
+
+## Running tests
+
+```bash
+pytest
+```
+
+Most tests pass. Two are currently skipped with `# TODO` comments describing what needs to be fixed before they can be enabled.
+
+## Known Issues
+
+- **Incomplete traces on failed pipeline runs.** When a downstream call raises an exception, the trace for that pipeline run is missing from the output. No error is surfaced — the span simply does not appear.
