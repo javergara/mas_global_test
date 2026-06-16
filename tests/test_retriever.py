@@ -53,6 +53,13 @@ class TestWithRetry:
 
         assert calls == 1
 
+    async def test_rejects_non_positive_max_attempts(self):
+        async def fn():
+            return "unused"
+
+        with pytest.raises(ValueError, match="max_attempts must be >= 1"):
+            await with_retry(fn, max_attempts=0, delay_s=0)
+
     async def test_emits_span_capturing_retry_attempts(self):
         calls = 0
 

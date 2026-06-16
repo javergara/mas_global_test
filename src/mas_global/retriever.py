@@ -18,7 +18,14 @@ async def with_retry[T](
     Retries an async callable up to *max_attempts* times with a fixed
     *delay_s* seconds between attempts. Propagates the last exception
     when all attempts are exhausted or *should_retry* returns False.
+
+    Raises ValueError if *max_attempts* < 1.
     """
+    # Guard the caller's contract explicitly. Without this, max_attempts < 1 skips
+    # the loop entirely and surfaces a misleading RuntimeError("unreachable"); a
+    # ValueError names the real mistake instead of masking it.
+    if max_attempts < 1:
+        raise ValueError(f"max_attempts must be >= 1, got {max_attempts}")
     # Tracing: emit a single span per call, named "retriever.with_retry", so the
     # PM has visibility into retry behaviour against a degraded vector store.
     # Attributes use the "retry.*" namespace:
