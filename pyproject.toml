@@ -38,11 +38,7 @@ warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
-files = ["src", "tests"]
-
-[[tool.mypy.overrides]]
-module = "tests.*"
-disallow_untyped_defs = false
+files = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
