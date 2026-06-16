@@ -40,10 +40,6 @@ class TestRAGPipeline:
         assert spans[0].name == "rag.pipeline.run"
         assert spans[0].attributes["query.id"] == "q-001"
 
-    # TODO: This test is skipped because of a known bug.
-    # When retrieve() raises, the test expects a finished span with ERROR status.
-    # Fix the bug in pipeline.py so this test passes, then remove the @pytest.mark.skip.
-    @pytest.mark.skip(reason="known bug in pipeline.py — fix it and remove this skip")
     async def test_closes_span_with_error_status_when_retrieve_raises(self):
         async def failing_retrieve(query: Query) -> list[Document]:
             raise RuntimeError("vector store unavailable")

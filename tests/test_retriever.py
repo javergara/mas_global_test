@@ -53,17 +53,6 @@ class TestWithRetry:
 
         assert calls == 1
 
-    # TODO: with_retry currently emits no spans.
-    #
-    # The PM needs visibility into retry behavior when the vector store is degraded:
-    # how many attempts were made, and what was the final outcome.
-    #
-    # Add OTel tracing to with_retry in retriever.py so this test passes.
-    # Span name, attribute names, and structure are your call.
-    # Document your decisions in a short comment in the code.
-    #
-    # Remove the @pytest.mark.skip when the test passes.
-    @pytest.mark.skip(reason="with_retry has no tracing yet — implement and remove this skip")
     async def test_emits_span_capturing_retry_attempts(self):
         calls = 0
 
