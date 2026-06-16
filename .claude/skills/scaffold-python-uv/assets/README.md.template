@@ -1,0 +1,48 @@
+# __PROJECT_NAME__
+
+> TODO: One or two sentence description of what this project does.
+
+## Requirements
+
+- Python 3.12 (see `.python-version`)
+- [uv](https://docs.astral.sh/uv/) for dependency management
+
+## Development setup
+
+```bash
+# Install dependencies (creates .venv and uv.lock)
+uv sync
+
+# Install git hooks
+uv run pre-commit install
+```
+
+## Common tasks
+
+```bash
+# Run tests
+uv run pytest
+
+# Lint
+uv run ruff check .
+
+# Format
+uv run ruff format .
+
+# Type check
+uv run mypy src
+
+# Run all pre-commit hooks against the whole repo
+uv run pre-commit run --all-files
+```
+
+## Project layout
+
+```
+src/__PKG_NAME__/   # application source (src-layout)
+tests/              # test suite
+```
+
+## License
+
+MIT — see [LICENSE](LICENSE).

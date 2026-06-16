@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: __RUFF_REV__
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: __MYPY_REV__
+    hooks:
+      - id: mypy
+        args: [--config-file=pyproject.toml]
+        pass_filenames: false
+        always_run: true
